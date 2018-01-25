@@ -8,13 +8,21 @@ using System.Data.SqlClient;
 
 public partial class _Default : System.Web.UI.Page
 {
-     
+    public static int projectIndex;
+    public static int skillIndex;
     
     protected void Page_Load(object sender, EventArgs e)
     {
+        projectIndex = DropDownProject.SelectedIndex;
+        skillIndex = DropDownSkill.SelectedIndex;
+        Label.Text += " Project: "  + projectIndex + " Skill: " + skillIndex;
+
         selectSkills();
         selectProjects();
         clearLabel();
+        
+        
+        
   
     }
 
@@ -59,7 +67,48 @@ public partial class _Default : System.Web.UI.Page
 
             }
         }
+        Label.Text += DropDownProject.SelectedIndex;
+        if (projectIndex == -1)
+        {
+            working = false;
+            Label.Text += "Please select a project";
+        }
+        if (skillIndex == -1)
+        {
+            working = false;
+            Label.Text += "Please select a skill";
+        }
+        //Checking the project dates
+        if (projectIndex != 0)
+        {
+            if (txtProjectStartDate.Value != "")
+            {
+                if (txtProjectEndDate.Value != "")
+                {
+ 
+                    if (DateTime.Parse(txtProjectStartDate.Value) >= DateTime.Parse(txtProjectEndDate.Value))
+                    {
+                        working = false;
+                        Label.Text += "Project End Date exceeds Project Start Date";
 
+                    }
+                }
+            }
+            else
+            {
+                Label.Text += "Projects must have a start date";
+                working = false;
+            }
+        }
+
+        if (txtProjectStartDate.Value != "")
+        {
+            if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtProjectStartDate.Value)) == false)
+            {
+                working = false;
+                Label.Text += "Project Start Date is before employee is hired";
+            }
+        }
         // Checks if the birthdate is over 18
         if (check.Date >= currentDate.Date)
         {
@@ -100,6 +149,8 @@ public partial class _Default : System.Web.UI.Page
                 Label.Text += "Enter a valid state";
             }
         }
+        
+
 
         // Checks if country is set to US
         if (country.ToUpper() != "US")
@@ -157,13 +208,15 @@ public partial class _Default : System.Web.UI.Page
                 Employee newEmployee = new Employee(txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
                                       State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
 
+            
+            CommitToDB(newEmployee);
+            EmployeeData.DataBind();
 
-                CommitToDB(newEmployee);
-            if (DropDownSkill.SelectedIndex != 0)
+            if (skillIndex > 0)
             {
                 insertEmployeeSkill();
             }
-            if (DropDownProject.SelectedIndex != 0)
+            if (projectIndex > 0)
             {
                 insertEmployeeProject();
             }
@@ -226,6 +279,8 @@ public partial class _Default : System.Web.UI.Page
             Label.Text += "Employee has been added to the database!";
             insert.ExecuteNonQuery();
             sc.Close();
+
+  
 
 
         }
@@ -374,13 +429,9 @@ public partial class _Default : System.Web.UI.Page
             {
                 return comparename;
             }
-            
-        
 
 
-
-
-        }
+    }
 
     private bool compareOne(string item, string table, string field)
     {
@@ -455,24 +506,38 @@ public partial class _Default : System.Web.UI.Page
     {
         try
         {
+
              
             System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
             sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
             System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
             insert.Connection = sc;
             sc.Open();
-            insert.CommandText = "insert into [dbo].[EMPLOYEESKILL] values(" + findMax() + ", " + DropDownSkill.SelectedIndex + ", 'Andrea Derflinger', '" + DateTime.Now + "')";
+            insert.CommandText = "insert into [dbo].[EmployeeSkill] values(" + findMax() + ", " + skillIndex + ", 'Andrea Derflinger', '" + DateTime.Now + "')";
+            insert.ExecuteNonQuery();
             sc.Close();
+            Label.Text += insert.CommandText;
         }
 
         catch(Exception t)
         {
+            Label.Text += t.Message;
             Label.Text += "Data was not inserted into EmployeeSkill table.";
         }
     }
 
     private void insertEmployeeProject()
     {
+        DateTime EndDate;
+        if (txtProjectEndDate.Value == "")
+        {
+             EndDate = DateTime.MinValue;
+
+        }
+        else
+        {
+            EndDate = DateTime.Parse(txtProjectEndDate.Value);
+        }
         try
         {
 
@@ -481,14 +546,25 @@ public partial class _Default : System.Web.UI.Page
             System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
             insert.Connection = sc;
             sc.Open();
-            insert.CommandText = "insert into [dbo].[EMPLOYEEPROJECT] values(" + findMax() + ", " + DropDownProject.SelectedIndex + ", '" + DateTime.Parse(txtProjectStartDate.Value) + "', '" 
-                + DateTime.Parse(txtProjectEndDate.Value) + "', 'Andrea Derflinger', '" + DateTime.Now + "')";
+            insert.CommandText = "insert into [dbo].[EmployeeProject] values(" + findMax() + ", " + projectIndex + ",'" + DateTime.Parse(txtProjectStartDate.Value);
+            if (EndDate == DateTime.MinValue)
+            {
+                insert.CommandText += "', NULL, ";
+            }
+            else
+            {
+                insert.CommandText += "', '" + DateTime.Parse(txtProjectEndDate.Value) + "', ";
+            }
+            insert.CommandText += "'Andrea Derflinger', '" + DateTime.Now + "')";
+            insert.ExecuteNonQuery();
             sc.Close();
+            Label.Text += insert.CommandText;
         }
 
         catch (Exception t)
         {
-            Label.Text += "Data was not inserted into EmployeeSkill table.";
+            Label.Text += t.Message;
+            Label.Text += "Data was not inserted into EmployeeProject table.";
         }
     }
 

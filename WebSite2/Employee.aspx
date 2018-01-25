@@ -114,11 +114,11 @@
             </tr>
             <tr>
                 <td>
-                    <asp:DropDownList ID="DropDownProject" required="" runat="server" Width="128px" TabIndex="5"></asp:DropDownList>
+                    <asp:DropDownList ID="DropDownProject" runat="server" Width="128px" TabIndex="5"></asp:DropDownList>
                     
                 </td>
                 <td class="auto-style4">
-                    <input id="txtCountry" type="text"   required="" runat="server" maxlength="2" tab="12"/>
+                    <input id="txtCountry" type="text"   required="" runat="server" maxlength="2" tabindex="12"/>
                 </td>
             </tr>
             <tr >
@@ -153,7 +153,7 @@
                     <input id="txtProjectEndDate" type="text" runat="server" placeholder="YYYY-MM-DD" tabindex="7"/>
                 </td>
                 <td class="auto-style5">
-                    <asp:DropDownList ID="DropDownSkill" required="" runat="server" Width="128px" TabIndex="14"></asp:DropDownList>
+                    <asp:DropDownList ID="DropDownSkill" runat="server" Width="128px" TabIndex="14"></asp:DropDownList>
                 </td>
             </tr>
             <tr class="spaceUnder">

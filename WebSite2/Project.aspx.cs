@@ -29,7 +29,7 @@ public partial class _Default : System.Web.UI.Page
                 insert.Connection = sc;
 
 
-                insert.CommandText += "insert into [dbo].[PROJECT] values ('" + newProject.ProjectName + "', '" + newProject.LastUpdatedBy + "', '" + newProject.LastUpdated + "')";
+                insert.CommandText += "insert into [dbo].[PROJECT] values ('" + newProject.ProjectName + "', '" + newProject.ProjectDescription + "', '" + newProject.LastUpdatedBy + "', '" + newProject.LastUpdated + "')";
 
 
                 Label.Text += "Project has been added to database!";
