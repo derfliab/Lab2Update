@@ -133,7 +133,7 @@ public partial class _Default : System.Web.UI.Page
         // Checks if Manager ID exists
         if (txtManager.Value != "")
         {
-            if (compareInt((int.Parse(txtManager.Value)), "EMPLOYEE", "EmployeeID") == false)
+            if (findManagerID(int.Parse(txtManager.Value)) == false)
             {
                 working = false;
                 Label.Text += "Manager ID does not exist";
@@ -149,8 +149,8 @@ public partial class _Default : System.Web.UI.Page
                 Label.Text += "Enter a valid state";
             }
         }
-        
 
+         
 
         // Checks if country is set to US
         if (country.ToUpper() != "US")
@@ -350,7 +350,10 @@ public partial class _Default : System.Web.UI.Page
         System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
         sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
         System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
-        insert.CommandText = "select * from [dbo].[Employee]";
+        insert.CommandText = "SELECT Employee.EmployeeID, Employee.FirstName, Employee.LastName, Project.ProjectID, Project.ProjectName " +
+            "FROM Employee " +
+            "INNER JOIN EmployeeProject on Employee.EmployeeID = EmployeeProject.EmployeeID " +
+            "LEFT OUTER JOIN Project on EmployeeProject.ProjectID = Project.ProjectID";
         insert.Connection = sc;
         sc.Open();
         SqlDataReader rdr = insert.ExecuteReader();
@@ -456,6 +459,30 @@ public partial class _Default : System.Web.UI.Page
             return compareOne;
         }
 
+    }
+    
+    private bool findManagerID(int num)
+    {
+        int result = 0;
+        bool compareManager = false;
+        System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+        sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
+        System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
+        insert.Connection = sc;
+        sc.Open();
+        insert.CommandText = "select Count(*) FROM [dbo].[EMPLOYEE] WHERE [dbo].[EMPLOYEE].[EmployeeID] = " + num;
+        result = (int)insert.ExecuteScalar();
+        sc.Close();
+        if (result > 0)
+        {
+            compareManager = true;
+            return compareManager;
+        }
+
+        else
+        {
+            return compareManager;
+        }
     }
     private bool compareInt(int item, string table, string field)
     {

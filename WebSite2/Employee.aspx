@@ -106,7 +106,7 @@
             </tr>
             <tr>
                <td>
-                    Projects:
+                    Projects*:
                 </td>  
                 <td class="auto-style4">
                     Country:
@@ -145,7 +145,7 @@
                 </td>
                 <td class="auto-style5">
 
-                    Skills:</td>
+                    Skills*:</td>
             </tr>
              <tr>
                 
@@ -176,7 +176,7 @@
             <tr>
                 <td class="auto-style4">
                      
-                    <input id="txtHire" runat="server" type="text" placeholder="YYYY-MM-DD" tabindex="15"/>
+                    <input id="txtHire" runat="server" type="text" required="" placeholder="YYYY-MM-DD" tabindex="15"/>
                      
                 </td>
                 <td class="auto-style5">
@@ -194,7 +194,7 @@
             </tr>
             <tr>
                 <td class="auto-style4">
-                    <input id="txtManager" type="text" runat="server" tabindex="17"/>
+                    <input id="txtManager" type="number" runat="server" tabindex="17"/>
                 </td>
                 <td class="auto-style5">
                     <input id="txtSalary" required="" type="text" runat="server" tabindex="18"/>
