@@ -381,10 +381,7 @@ public partial class _Default : System.Web.UI.Page
         System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
         sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
         System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
-        insert.CommandText = "SELECT Employee.EmployeeID, Employee.FirstName, Employee.LastName, Project.ProjectID, Project.ProjectName " +
-            "FROM Employee " +
-            "INNER JOIN EmployeeProject on Employee.EmployeeID = EmployeeProject.EmployeeID " +
-            "LEFT OUTER JOIN Project on EmployeeProject.ProjectID = Project.ProjectID";
+        insert.CommandText = "SELECT Employee.EmployeeID, Employee.FirstName, Employee.LastName, Project.ProjectID, Project.ProjectName FROM Employee LEFT OUTER JOIN EmployeeProject on Employee.EmployeeID = EmployeeProject.EmployeeID LEFT OUTER JOIN Project on EmployeeProject.ProjectID = Project.ProjectID";
         insert.Connection = sc;
         sc.Open();
         SqlDataReader rdr = insert.ExecuteReader();
