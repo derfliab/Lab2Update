@@ -6,6 +6,12 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 
+/**
+ * Andrea Derflinger
+ * Lab 2 
+ * 1/30/2018
+ * This work and I comply with the JMU Honor Code.
+**/
 public partial class _Default : System.Web.UI.Page
 {
     public static int projectIndex;
@@ -13,9 +19,24 @@ public partial class _Default : System.Web.UI.Page
     
     protected void Page_Load(object sender, EventArgs e)
     {
-        projectIndex = DropDownProject.SelectedIndex;
-        skillIndex = DropDownSkill.SelectedIndex;
-        Label.Text += " Project: "  + projectIndex + " Skill: " + skillIndex;
+        if(DropDownSkill.SelectedIndex > 0)
+        {
+            skillIndex = DropDownSkill.SelectedIndex + 1;
+        }
+        else
+        {
+            skillIndex = DropDownSkill.SelectedIndex;
+        }
+        if(DropDownProject.SelectedIndex > 0)
+        {
+            projectIndex = DropDownProject.SelectedIndex + 1;
+        }
+        else
+        {
+            projectIndex = DropDownProject.SelectedIndex;
+        }
+        
+         
 
         selectSkills();
         selectProjects();
@@ -48,117 +69,127 @@ public partial class _Default : System.Web.UI.Page
 
     protected void EmployeeCommitBtn_Click(object sender, EventArgs e)
     {
-        DateTime currentDate = DateTime.Now;
-        DateTime check = DateTime.Parse(txtDOB.Value).AddYears(18);
-        DateTime oldcheck = DateTime.Parse(txtDOB.Value).AddYears(65);
         bool working = true;
-        string country = txtCountry.Value;
+        bool checktextbox = true;
+        //Checks the textboxes to make sure it can parse all data 
+        if (checkTextboxes() == false)
+        {
+            working = false;
+            checktextbox = false;
+            Label.Text += "Textboxes are unable to be parsed, please enter valid information.";
+        }
         // Checks Validation for the following if statements. If any of them return false, the employee will not be added to the array.
-
-        //Checks if the termination date has nothing in it
-        if (txtTerm.Value != "")
+        if (checktextbox == true)
         {
+            DateTime currentDate = DateTime.Now;
+            DateTime check = DateTime.Parse(txtDOB.Value).AddYears(18);
+            DateTime oldcheck = DateTime.Parse(txtDOB.Value).AddYears(65);
+            string country = txtCountry.Value;
 
-
-            if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtTerm.Value)) == false)
+            //Checks if the termination date has nothing in it
+            if (txtTerm.Value != "")
             {
-                working = false;
-                Label.Text += "Termination Date exceeds Hire Date";
 
-            }
-        }
-        Label.Text += DropDownProject.SelectedIndex;
-        if (projectIndex == -1)
-        {
-            working = false;
-            Label.Text += "Please select a project";
-        }
-        if (skillIndex == -1)
-        {
-            working = false;
-            Label.Text += "Please select a skill";
-        }
-        //Checking the project dates
-        if (projectIndex != 0)
-        {
-            if (txtProjectStartDate.Value != "")
-            {
-                if (txtProjectEndDate.Value != "")
+
+                if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtTerm.Value)) == false)
                 {
- 
-                    if (DateTime.Parse(txtProjectStartDate.Value) >= DateTime.Parse(txtProjectEndDate.Value))
-                    {
-                        working = false;
-                        Label.Text += "Project End Date exceeds Project Start Date";
+                    working = false;
+                    Label.Text += "Termination Date exceeds Hire Date";
 
-                    }
                 }
             }
-            else
-            {
-                Label.Text += "Projects must have a start date";
-                working = false;
-            }
-        }
-
-        if (txtProjectStartDate.Value != "")
-        {
-            if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtProjectStartDate.Value)) == false)
+             
+            if (projectIndex == -1)
             {
                 working = false;
-                Label.Text += "Project Start Date is before employee is hired";
+                Label.Text += "Please select a project";
             }
-        }
-        // Checks if the birthdate is over 18
-        if (check.Date >= currentDate.Date)
-        {
-            working = false;
-            Label.Text += "Invalid Birth Day- Please make sure you are over 18.";
-
-        }
-
-        // Checks if the birthdate is under 65
-        if (oldAge(DateTime.Parse(txtDOB.Value)) >= 65)
-        {
-            working = false;
-            Label.Text += "Invalid Birth Day- You must be younger than 65";
-        }
-
-        //Checks that the hiredate is at least 18 years later than the birthdate
-        if (check.Date >= DateTime.Parse(txtHire.Value))
-        {
-            working = false;
-            Label.Text += "Invalid Hire Date- Hire date must be 18 years from Birth Date";
-        }
-        // Checks if Manager ID exists
-        if (txtManager.Value != "")
-        {
-            if (findManagerID(int.Parse(txtManager.Value)) == false)
+            if (skillIndex == -1)
             {
                 working = false;
-                Label.Text += "Manager ID does not exist";
+                Label.Text += "Please select a skill";
             }
-        }
+            //Checking the project dates
+            if (projectIndex != 0)
+            {
+                if (txtProjectStartDate.Value != "")
+                {
+                    if (txtProjectEndDate.Value != "")
+                    {
 
-        // Checks if State is a valid state
-        if (txtState.Value != "")
-        {
-            if (findState(txtState.Value) == false)
+                        if (DateTime.Parse(txtProjectStartDate.Value) >= DateTime.Parse(txtProjectEndDate.Value))
+                        {
+                            working = false;
+                            Label.Text += "Project End Date exceeds Project Start Date";
+
+                        }
+                    }
+                }
+                else
+                {
+                    Label.Text += "Projects must have a start date";
+                    working = false;
+                }
+            }
+
+            if (txtProjectStartDate.Value != "")
+            {
+                if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtProjectStartDate.Value)) == false)
+                {
+                    working = false;
+                    Label.Text += "Project Start Date is before employee is hired";
+                }
+            }
+            // Checks if the birthdate is over 18
+            if (check.Date >= currentDate.Date)
             {
                 working = false;
-                Label.Text += "Enter a valid state";
+                Label.Text += "Invalid Birth Day- Please make sure you are over 18.";
+
+            }
+
+            // Checks if the birthdate is under 65
+            if (oldAge(DateTime.Parse(txtDOB.Value)) >= 65)
+            {
+                working = false;
+                Label.Text += "Invalid Birth Day- You must be younger than 65";
+            }
+
+            //Checks that the hiredate is at least 18 years later than the birthdate
+            if (check.Date >= DateTime.Parse(txtHire.Value))
+            {
+                working = false;
+                Label.Text += "Invalid Hire Date- Hire date must be 18 years from Birth Date";
+            }
+            // Checks if Manager ID exists
+            if (txtManager.Value != "")
+            {
+                if (findManagerID(int.Parse(txtManager.Value)) == false)
+                {
+                    working = false;
+                    Label.Text += "Manager ID does not exist";
+                }
+            }
+
+            // Checks if State is a valid state
+            if (txtState.Value != "")
+            {
+                if (findState(txtState.Value) == false)
+                {
+                    working = false;
+                    Label.Text += "Enter a valid state";
+                }
+            }
+
+
+
+            // Checks if country is set to US
+            if (country.ToUpper() != "US")
+            {
+                working = false;
+                Label.Text += "Please make the country US";
             }
         }
-
-         
-
-        // Checks if country is set to US
-        if (country.ToUpper() != "US")
-        {
-            working = false;
-            Label.Text += "Please make the country US";
-        }
-
         if (working == true)
         {
             string MI;
@@ -212,7 +243,7 @@ public partial class _Default : System.Web.UI.Page
             CommitToDB(newEmployee);
             EmployeeData.DataBind();
 
-            if (skillIndex > 0)
+            if (skillIndex != 0)
             {
                 insertEmployeeSkill();
             }
@@ -287,7 +318,7 @@ public partial class _Default : System.Web.UI.Page
         catch (Exception a)
         {
             Label.Text += "Error";
-            Label.Text += a.Message;
+             
         }
     }
 
@@ -310,7 +341,7 @@ public partial class _Default : System.Web.UI.Page
             DropDownSkill.DataSource = insert.ExecuteReader();
             DropDownSkill.DataTextField = "SkillName";
             DropDownSkill.DataBind();
-            DropDownSkill.Items.Insert(0, new ListItem("NONE", ""));
+             
             sc.Close();
         }
         catch (Exception s)
@@ -334,7 +365,7 @@ public partial class _Default : System.Web.UI.Page
             DropDownProject.DataSource = insert.ExecuteReader();
             DropDownProject.DataTextField = "ProjectName";
             DropDownProject.DataBind();
-            DropDownProject.Items.Insert(0, new ListItem("NONE", ""));
+            
 
             sc.Close();
         }
@@ -362,6 +393,41 @@ public partial class _Default : System.Web.UI.Page
         sc.Close();
          
 
+    }
+
+    private bool checkTextboxes()
+    {
+        bool check = true;
+        try
+        {
+            DateTime.Parse(txtDOB.Value);
+            DateTime.Parse(txtHire.Value);
+            Double.Parse(txtSalary.Value);
+            int.Parse(txtSalary.Value);
+            if (txtManager.Value != "")
+            {
+                int.Parse(txtManager.Value);
+            }
+            if (txtTerm.Value != "")
+            {
+                DateTime.Parse(txtTerm.Value);
+            }
+            if (txtProjectEndDate.Value != "")
+            {
+                DateTime.Parse(txtProjectEndDate.Value);
+            }
+            if (txtProjectStartDate.Value != "")
+            {
+                DateTime.Parse(txtProjectStartDate.Value);
+            }
+
+            return check;
+        }
+        catch (Exception a)
+        {
+            check = false;
+            return check;
+        }
     }
 
     // Find the state in an array
@@ -543,7 +609,7 @@ public partial class _Default : System.Web.UI.Page
             insert.CommandText = "insert into [dbo].[EmployeeSkill] values(" + findMax() + ", " + skillIndex + ", 'Andrea Derflinger', '" + DateTime.Now + "')";
             insert.ExecuteNonQuery();
             sc.Close();
-            Label.Text += insert.CommandText;
+            
         }
 
         catch(Exception t)
@@ -585,7 +651,7 @@ public partial class _Default : System.Web.UI.Page
             insert.CommandText += "'Andrea Derflinger', '" + DateTime.Now + "')";
             insert.ExecuteNonQuery();
             sc.Close();
-            Label.Text += insert.CommandText;
+             
         }
 
         catch (Exception t)
@@ -595,4 +661,8 @@ public partial class _Default : System.Web.UI.Page
         }
     }
 
+    protected void ExitBtn_Click(object sender, EventArgs e)
+    {
+        Environment.Exit(0);
+    }
 }

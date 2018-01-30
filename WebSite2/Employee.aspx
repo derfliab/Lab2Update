@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Employee.aspx.cs" Inherits="_Default" %>
-
+﻿<%@ Page Title="Andrea Derflinger" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Employee.aspx.cs" Inherits="_Default" %>
+ 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <style type="text/css">
         .auto-style3 {
@@ -194,7 +194,7 @@
             </tr>
             <tr>
                 <td class="auto-style4">
-                    <input id="txtManager" type="number" runat="server" tabindex="17"/>
+                    <input id="txtManager" type="text" runat="server" tabindex="17"/>
                 </td>
                 <td class="auto-style5">
                     <input id="txtSalary" required="" type="text" runat="server" tabindex="18"/>
@@ -217,9 +217,10 @@
          
         
          
-        <asp:Button ID="ClearBtn" runat="server" style="margin-right:20px" OnClick="ClearBtn_Click" Text="Clear" />
+        <asp:Button ID="ClearBtn" runat="server" style="margin-right:20px" OnClick="ClearBtn_Click" formnovalidate="false" Text="Clear" />
         <asp:Button ID="EmployeeCommittBtn" runat="server" style="margin-right:20px" OnClick="EmployeeCommitBtn_Click" Text="Employee Commit" />
         <asp:Button ID="ShowData" runat="server" style="margin-right:20px" OnClick="ShowDataBtn_Click" formnovalidate="false" Text="Show Data" />
+        <asp:Button ID="Exit" runat="server" style="margin-right:20px" OnClick="ExitBtn_Click" formnovalidate="false" Text="Exit" />
         <br />
         <br />
         <asp:GridView ID="EmployeeData" runat="server"></asp:GridView>

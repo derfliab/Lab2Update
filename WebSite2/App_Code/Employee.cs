@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-/// <summary>
-/// Summary description for Class1
-/// </summary>
+/**
+ * Andrea Derflinger
+ * Lab 2 
+ * 1/30/2018
+ * This work and I comply with the JMU Honor Code.
+**/
 public class Employee
 {
     private string fName;

@@ -1,5 +1,10 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
-
+<!--
+ * Andrea Derflinger
+ * Lab 2 
+ * 1/30/2018
+ * This work and I comply with the JMU Honor Code.
+-->
 <!DOCTYPE html>
 
 <html>

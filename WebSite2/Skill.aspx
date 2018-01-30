@@ -1,5 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Skill.aspx.cs" Inherits="_Default" %>
-
+﻿<%@ Page Title="Andrea Derflinger" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeFile="Skill.aspx.cs" Inherits="_Default" %>
+ 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
     <style type="text/css">
         .auto-style1 {
